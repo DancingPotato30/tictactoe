@@ -27,9 +27,26 @@ body{
 }
 
 .x{
-    color: blue;
+    color: #0081B4;
 }
 
 .o{
-    color: rgb(255, 61, 94);
+    color: #EFA3C8;
+}
+.names{
+    display: flex;
+    gap: 50px;
+}
+
+.playerO, .playerX{
+    display: flex;
+    flex-direction: column;
+}
+
+.playerO{
+    color: #EFA3C8;
+}
+
+.playerX{
+    color: #0081B4;
 }

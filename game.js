@@ -21,6 +21,7 @@ const gameControl = (() => {
       space.classList.remove("x");
       space.classList.remove("o");
     });
+    document.querySelector("body").removeChild(restartBtn);
   });
 
   let restartBtnMaker = () => {
@@ -30,6 +31,9 @@ const gameControl = (() => {
 
   let gameOverDisplay = (lastPlayer, state) => {
     if (state == "win") {
+      if (lastPlayer == "X") {
+        console.log("Name");
+      }
       console.log(`${lastPlayer} won the game!`);
     } else if (state == "draw") {
       console.log("Draw!");
@@ -130,11 +134,31 @@ const gameboard = (() => {
     printBoard();
   };
 
+  let nameInputX = document.querySelector(".xname");
+  let nameInputO = document.querySelector(".oname");
+
+  nameInputX.addEventListener("keyup", (e) => {
+    playerX.name = nameInputX.value;
+  });
+
+  nameInputO.addEventListener("keyup", (e) => {
+    playerO.name = nameInputO.value;
+  });
+
+  window.addEventListener("load", () => {
+    playerX.name = nameInputX.value;
+    playerO.name = nameInputO.value;
+  });
+
   return { printBoard, getBoard, restartBoard };
 })();
 
 const playerFactory = (mark) => {
-  return { mark };
+  let name;
+  let getName = () => {
+    return name;
+  };
+  return { mark, getName };
 };
 let counter = 0;
 playerX = playerFactory("X");
@@ -143,5 +167,6 @@ playerO = playerFactory("O");
 gameControl.putMark(playerX);
 
 document.querySelector(".checker").addEventListener("click", () => {
-  console.log(gameboard.getBoard());
+  console.log(playerO.name);
+  console.log(playerX.name);
 });
