@@ -1,6 +1,9 @@
 const gameControl = (() => {
   let gameStart = true;
 
+  let winnerDisplay = document.createElement("div");
+  winnerDisplay.classList.add("winner");
+
   let switchPlayer = (currentPlayer) => {
     if (currentPlayer == playerO) {
       currentPlayer = playerX;
@@ -22,6 +25,7 @@ const gameControl = (() => {
       space.classList.remove("o");
     });
     document.querySelector("body").removeChild(restartBtn);
+    document.querySelector("body").removeChild(winnerDisplay);
   });
 
   let restartBtnMaker = () => {
@@ -30,14 +34,19 @@ const gameControl = (() => {
   };
 
   let gameOverDisplay = (lastPlayer, state) => {
-    if (state == "win") {
-      if (lastPlayer == "X") {
-        console.log("Name");
-      }
-      console.log(`${lastPlayer} won the game!`);
-    } else if (state == "draw") {
-      console.log("Draw!");
+    let winner;
+    if (lastPlayer == "X") {
+      winner = playerX.name;
+    } else {
+      winner = playerO.name;
     }
+
+    if (state == "win") {
+      winnerDisplay.textContent = `${winner} won the game!`;
+    } else if (state == "draw") {
+      winnerDisplay.textContent = "Draw!";
+    }
+    document.querySelector("body").appendChild(winnerDisplay);
     restartBtnMaker();
   };
 

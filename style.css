@@ -50,3 +50,10 @@ body{
 .playerX{
     color: #0081B4;
 }
+
+.winner{
+    font-size: 3rem;
+    color: white;
+    border: solid black;
+    padding: 10px;
+}
