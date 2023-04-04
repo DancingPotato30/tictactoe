@@ -1,4 +1,6 @@
 const gameControl = (() => {
+  let gameStart = true;
+
   let switchPlayer = (currentPlayer) => {
     if (currentPlayer == playerO) {
       currentPlayer = playerX;
@@ -9,25 +11,47 @@ const gameControl = (() => {
     return currentPlayer;
   };
 
+  let restartBtn = document.createElement("button");
+  restartBtn.classList.add("restartBtn");
+  restartBtn.textContent = "Play Again!";
+  restartBtn.addEventListener("click", () => {
+    gameboard.restartBoard();
+    gameStart = true;
+    document.querySelectorAll(".space").forEach((space) => {
+      space.classList.remove("x");
+      space.classList.remove("o");
+    });
+  });
+
+  let restartBtnMaker = () => {
+    document.querySelector("body").appendChild(restartBtn);
+    gameStart = false;
+  };
+
   let gameOverDisplay = (lastPlayer, state) => {
     if (state == "win") {
       console.log(`${lastPlayer} won the game!`);
     } else if (state == "draw") {
       console.log("Draw!");
     }
+    restartBtnMaker();
   };
 
   let putMark = (currentPlayer) => {
     document.querySelectorAll(".space").forEach((space) => {
       space.addEventListener("click", () => {
         //console.log("clicked");
-        if (gameboard.board[space.dataset.grid - 1] == "") {
-          gameboard.board[space.dataset.grid - 1] = currentPlayer.mark;
-          gameboard.printBoard();
-          gameOverCheck(space);
-          currentPlayer = switchPlayer(currentPlayer);
+        if (gameStart == false) {
+          return;
         } else {
-          console.log("ERROR");
+          if (gameboard.getBoard()[space.dataset.grid - 1] == "") {
+            gameboard.getBoard()[space.dataset.grid - 1] = currentPlayer.mark;
+            gameboard.printBoard();
+            gameOverCheck(space);
+            currentPlayer = switchPlayer(currentPlayer);
+          } else {
+            console.log("ERROR");
+          }
         }
       });
     });
@@ -87,17 +111,26 @@ const gameControl = (() => {
 
 const gameboard = (() => {
   let board = ["", "", "", "", "", "", "", "", ""];
+  let getBoard = () => {
+    return board;
+  };
   let printBoard = () => {
     document.querySelectorAll(".space").forEach((space) => {
-      if (board[Number(space.dataset.grid - 1)] == "X") {
+      if (getBoard()[space.dataset.grid - 1] == "X") {
         space.classList.add("x");
-      } else if (board[space.dataset.grid - 1] == "O") {
+      } else if (getBoard()[space.dataset.grid - 1] == "O") {
         space.classList.add("o");
       }
-      space.textContent = board[Number(space.dataset.grid - 1)];
+      space.textContent = getBoard()[space.dataset.grid - 1];
     });
   };
-  return { printBoard, board };
+
+  let restartBoard = () => {
+    board = ["", "", "", "", "", "", "", "", ""];
+    printBoard();
+  };
+
+  return { printBoard, getBoard, restartBoard };
 })();
 
 const playerFactory = (mark) => {
@@ -110,5 +143,5 @@ playerO = playerFactory("O");
 gameControl.putMark(playerX);
 
 document.querySelector(".checker").addEventListener("click", () => {
-  console.log(gameboard.board);
+  console.log(gameboard.getBoard());
 });
